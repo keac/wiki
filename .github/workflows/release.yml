@@ -16,19 +16,18 @@ jobs:
     - name: install nodejs
       uses: actions/setup-node@v1
       
-    - name: configue gitbook
-      run: |
-        npm install -g gitbook-cli          
-        gitbook install
+#     - name: configue gitbook
+#       run: |
+#         npm install -g gitbook-cli          
+#         gitbook install
                 
-    - name: generate _book folder
-      run: |
-         ls
+#     - name: generate _book folder
+#       run: |
 #        gitbook build
     
     - name: package poc
       run: |
-        ls "Goby & POC"
+        ls "Goby & POC" &
         zip -r goby_poc.zip "Goby & POC"/
                 
 #     - name: Deploy
