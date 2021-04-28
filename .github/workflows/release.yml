@@ -13,24 +13,24 @@ jobs:
       with:
         ref: master
             
-#     - name: install nodejs
-#       uses: actions/setup-node@v1
+    - name: install nodejs
+      uses: actions/setup-node@v1
       
-#     - name: configue gitbook
-#       run: |
-#         npm install -g gitbook-cli          
-#         gitbook install
-                
-#     - name: generate _book folder
-#       run: |
-#        gitbook build
-    
     - name: package poc
       run: |
         ls
         ls "Goby & POC" &
         zip -r goby_poc.zip "Goby & POC"/
+      
+    - name: configue gitbook
+      run: |
+        npm install -g gitbook-cli          
+        gitbook install
                 
+    - name: generate _book folder
+      run: |
+       gitbook build
+    
 #     - name: Deploy
 #       uses: peaceiris/actions-gh-pages@v3
 #       with:
@@ -51,6 +51,7 @@ jobs:
         body: ${{steps.github_release.outputs.changelog}}
         draft: false
         prerelease: false
+      
     - name: Upload POC_WIKI
       id: upload-release-pocwiki
       uses: actions/upload-release-asset@v1
