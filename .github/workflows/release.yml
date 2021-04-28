@@ -1,13 +1,12 @@
-name: WgpSec-POC-CI
+name: WgpSec-POC-CI-Release
 on:
   push:
-    branches:
-    - master
-
+    tags:
+      - '*'
+      
 jobs:
   build:
-    runs-on: ubuntu-latest
-        
+    runs-on: ubuntu-latest  
     steps:                          
     - name: checkout main
       uses: actions/checkout@v2
@@ -25,20 +24,38 @@ jobs:
     - name: generate _book folder
       run: |
         gitbook build
+    
+    - name: package poc
+      run: |
+        zip goby_poc.zip "Goby & POC"
                 
-    - name: Deploy
-      uses: peaceiris/actions-gh-pages@v3
-      with:
-        deploy_key: ${{ secrets.DEPLOY_KEY }}
-        publish_dir: ./_book
-        external_repository: wgpsec/wiki  
-        cname: poc.wgpsec.org
-        user_name: 'WgpSec Continuous Integration' 
-        user_email: 'ci@wgpsec.org' 
-    - name: Mirror to Coding.net
-      uses: wearerequired/git-mirror-action@v1.0.1
+#     - name: Deploy
+#       uses: peaceiris/actions-gh-pages@v3
+#       with:
+#         deploy_key: ${{ secrets.DEPLOY_KEY }}
+#         publish_dir: ./_book
+#         external_repository: wgpsec/wiki  
+#         cname: poc.wgpsec.org
+#         user_name: 'WgpSec Continuous Integration' 
+#         user_email: 'ci@wgpsec.org' 
+    - name: Create Release
+      id: create_release
+      uses: actions/create-release@v1
       env:
-        SSH_PRIVATE_KEY: ${{ secrets.DEPLOY_KEY }}
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        source-repo: git@github.com:wgpsec/wiki.git
-        destination-repo: git@e.coding.net:keac/poc/poc.git   
+        tag_name: ${{ github.ref }}
+        release_name: Release ${{ github.ref }}
+        body: ${{steps.github_release.outputs.changelog}}
+        draft: false
+        prerelease: false
+    - name: Upload POC_WIKI
+      id: upload-release-pocwiki
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: goby_poc.zip
+        asset_name: goby_poc.${{ steps.get_version.outputs.VERSION }}_.zip
+        asset_content_type: application/gzip
