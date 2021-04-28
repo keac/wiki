@@ -27,7 +27,7 @@ jobs:
     
     - name: package poc
       run: |
-        zip goby_poc.zip "Goby & POC"
+        zip -r goby_poc.zip "Goby & POC"
                 
 #     - name: Deploy
 #       uses: peaceiris/actions-gh-pages@v3
@@ -57,5 +57,5 @@ jobs:
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
         asset_path: goby_poc.zip
-        asset_name: goby_poc.${{ steps.get_version.outputs.VERSION }}_.zip
+        asset_name: peiqi_goby_poc.zip
         asset_content_type: application/gzip
