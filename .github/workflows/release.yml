@@ -31,6 +31,7 @@ jobs:
    
     - name: package wiki
       run: |
+        ls -a
         zip -r wiki.zip ./_book/
     
 #     - name: Deploy
