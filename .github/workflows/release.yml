@@ -18,8 +18,6 @@ jobs:
       
     - name: package poc
       run: |
-        ls
-        ls "Goby & POC" &
         zip -r goby_poc.zip "Goby & POC"/
       
     - name: configue gitbook
@@ -30,6 +28,12 @@ jobs:
     - name: generate _book folder
       run: |
        gitbook build
+   
+    - name: package wiki
+      run: |
+        ls
+        ls "Goby & POC" &
+        zip -r wiki.zip _book/
     
 #     - name: Deploy
 #       uses: peaceiris/actions-gh-pages@v3
@@ -52,7 +56,7 @@ jobs:
         draft: false
         prerelease: false
       
-    - name: Upload POC_WIKI
+    - name: Upload Goby POC
       id: upload-release-pocwiki
       uses: actions/upload-release-asset@v1
       env:
@@ -61,4 +65,15 @@ jobs:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
         asset_path: goby_poc.zip
         asset_name: peiqi_goby_poc.zip
+        asset_content_type: application/gzip
+    
+    - name: Upload WIKI
+      id: upload-release-wiki
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: wiki.zip
+        asset_name: peiqi_poc_wiki.zip
         asset_content_type: application/gzip
