@@ -31,9 +31,7 @@ jobs:
    
     - name: package wiki
       run: |
-        ls
-        ls "Goby & POC" &
-        zip -r wiki.zip _book/
+        zip -r wiki.zip ./_book/
     
 #     - name: Deploy
 #       uses: peaceiris/actions-gh-pages@v3
