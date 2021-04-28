@@ -27,7 +27,8 @@ jobs:
     
     - name: package poc
       run: |
-        zip -r goby_poc.zip "Goby & POC"
+        ls "Goby & POC"
+        zip -r goby_poc.zip "Goby & POC"/
                 
 #     - name: Deploy
 #       uses: peaceiris/actions-gh-pages@v3
