@@ -23,7 +23,8 @@ jobs:
                 
     - name: generate _book folder
       run: |
-        gitbook build
+         ls
+#        gitbook build
     
     - name: package poc
       run: |
