@@ -1,0 +1,44 @@
+name: WgpSec-POC-CI
+on:
+  push:
+    branches:
+    - master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+        
+    steps:                          
+    - name: checkout main
+      uses: actions/checkout@v2
+      with:
+        ref: master
+            
+    - name: install nodejs
+      uses: actions/setup-node@v1
+      
+    - name: configue gitbook
+      run: |
+        npm install -g gitbook-cli          
+        gitbook install
+                
+    - name: generate _book folder
+      run: |
+        gitbook build
+                
+    - name: Deploy
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        deploy_key: ${{ secrets.DEPLOY_KEY }}
+        publish_dir: ./_book
+        external_repository: wgpsec/wiki  
+        cname: poc.wgpsec.org
+        user_name: 'WgpSec Continuous Integration' 
+        user_email: 'ci@wgpsec.org' 
+    - name: Mirror to Coding.net
+      uses: wearerequired/git-mirror-action@v1.0.1
+      env:
+        SSH_PRIVATE_KEY: ${{ secrets.DEPLOY_KEY }}
+      with:
+        source-repo: git@github.com:wgpsec/wiki.git
+        destination-repo: git@e.coding.net:keac/poc/poc.git   
